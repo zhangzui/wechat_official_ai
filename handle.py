@@ -40,21 +40,26 @@ class Handle(object):
             if isinstance(recMsg, receive.Msg) and recMsg.MsgType == 'text':
                 toUser = recMsg.FromUserName
                 fromUser = recMsg.ToUserName
+                print("----recMsg.MsgId:"+recMsg.MsgId)
                 if recMsg.MsgId in Handle.cache:
+                   print("----Handle.cache[recMsg.MsgId]:" + Handle.cache[recMsg.MsgId])
                    if Handle.cache[recMsg.MsgId] != "":
                       replyMsg = reply.TextMsg(toUser, fromUser, Handle.cache[recMsg.MsgId])
                       print("成功发送")
                       return replyMsg.send()
                    else:
-                      print("AI还没有处理结束，等待下一次请求")
+                      print("AI还没有处理结束，等待下一次请求---start")
                       time.sleep(5)
+                      print("AI还没有处理结束，等待下一次请求---start")
                       return "success"
                 else:
+                   print("else---print-start:"+recMsg.MsgId)
                    Handle.cache[recMsg.MsgId] = ""
                    content = Handle.chat.chat(recMsg.Content)
                    Handle.cache[recMsg.MsgId] = content
                    replyMsg = reply.TextMsg(toUser, fromUser, content)
                    time.sleep(5)
+                   print("else---print-end:"+recMsg.MsgId)
                    return "success"
             else:
                 print("暂且不处理")
